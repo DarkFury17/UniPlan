@@ -131,33 +131,51 @@ npm run test:watch
 
 ---
 
-## 🚀 Quickstart & Installazione Locale
+## 🚀 Utilizzo & Web App Live
 
-Segui questi 3 semplici passaggi per eseguire l'intera applicazione in locale:
+L'applicazione è completamente distribuita e pronta all'uso senza richiedere installazione:
 
-### 1. Clona il Repository e Installa le Dipendenze
+[![Prova UniPlan Live su Vercel](https://img.shields.io/badge/%F0%9F%9A%80%20Apri%20UniPlan%20Live%20su%20Vercel-https%3A%2F%2Funi--plan--mocha.vercel.app-emerald?style=for-the-badge&logo=vercel&logoColor=white)](https://uni-plan-mocha.vercel.app)
+
+1. Apri la piattaforma: **[https://uni-plan-mocha.vercel.app](https://uni-plan-mocha.vercel.app)**
+2. Seleziona uno dei percorsi di laurea precaricati (*Informatica STEM*, *Economia Aziendale*, *Ingegneria Gestionale*) oppure crea il tuo piano da zero.
+3. Configura le ore di studio giornaliere desiderate e la data di inizio preparazione.
+4. Genera la timeline deterministica e scarica il file `.ics` per sincronizzarlo con **Google Calendar**, **Apple Calendar** o **Outlook**.
+
+---
+
+## 💻 Sviluppo Locale
+
+Se desideri clonare il repository per contribuire o testare il codice in locale:
+
+### 1. Clona il Repository
 ```bash
 git clone https://github.com/DarkFury17/UniPlan.git
 cd UniPlan
+```
+
+### 2. Installa le Dipendenze
+Installa le dipendenze del server Fastify e del client React:
+```bash
 npm install
 npm install --prefix client
 ```
 
-### 2. Configura le Variabili d'Ambiente
-Copia il file di esempio per configurare il database e la porta del server:
-```bash
-cp .env.example .env
-```
-
-### 3. Avvia Backend & Frontend in Contemporanea
+### 3. Avvia l'Ambiente di Sviluppo
+Il comando `npm run dev` avvia contemporaneamente il backend API (porta `3000`) e il server Vite con Hot Module Replacement (porta `5173`):
 ```bash
 npm run dev
 ```
-- **Frontend Dashboard:** [http://localhost:5173](http://localhost:5173) (con proxy automatico verso l'API)
-- **Fastify API Server:** [http://localhost:3000](http://localhost:3000)
-- **API Health Check:** `curl http://localhost:3000/api/health`
 
-> 💡 **Quick Demo:** Nella dashboard, seleziona uno dei percorsi di laurea accademici precaricati (Informatica, Economia, Ingegneria) oppure inserisci i tuoi insegnamenti per generare in pochi millisecondi il piano ottimizzato!
+- **Client Web (Locale):** [http://localhost:5173](http://localhost:5173) (con proxy automatico `/api` verso Fastify)
+- **API Server (Locale):** [http://localhost:3000](http://localhost:3000)
+- **Health Check API:** `curl http://localhost:3000/api/health`
+
+### 4. Verifica della Build
+Per validare il typechecking TypeScript e creare il bundle statico di produzione:
+```bash
+npm run build
+```
 
 ---
 
@@ -165,19 +183,9 @@ npm run dev
 
 UniPlan è architettato per un deployment disaccoppiato ad alte prestazioni e scalabilità cloud:
 
-- **Frontend statico su Vercel:** L'interfaccia React 19 è distribuita globalmente tramite la CDN edge di Vercel (`https://uni-plan-mocha.vercel.app`). La configurazione `vercel.json` implementa un reverse proxy trasparente per tutte le route `/api/*`, instradando il traffico direttamente verso il backend senza incorrere in limitazioni CORS.
-- **Backend headless su Render:** L'API Fastify risiede su Render (`https://uniplan-api.onrender.com`), configurata con host binding `0.0.0.0` e policy CORS permissive con allowed-headers per gestire richieste da qualsiasi client autorizzato.
+- **Frontend statico su Vercel:** L'interfaccia React 19 è distribuita globalmente tramite la CDN edge di Vercel (**[https://uni-plan-mocha.vercel.app](https://uni-plan-mocha.vercel.app)**). Il file [`client/vercel.json`](client/vercel.json) implementa un reverse proxy trasparente per tutte le chiamate `/api/*`, instradando il traffico verso Render senza problemi di CORS.
+- **Backend headless su Render:** L'API Fastify risiede su Render (**[https://uniplan-api.onrender.com](https://uniplan-api.onrender.com)**), configurata con host binding `0.0.0.0` e policy CORS con reflection dell'origine e header autorizzati.
 - **Calcolo Algoritmico In-Memory:** I motori DAG (Kahn + DFS) e CSP (backtracking con potatura topologica) operano interamente in memoria senza vincoli o latenze di database, garantendo tempi di risposta inferiori a 50ms e **zero cold-start** sul calcolo del piano.
-
----
-
-## 📦 Build di Produzione
-
-Per compilare sia il backend TypeScript che il frontend React per l'ambiente di produzione:
-
-```bash
-npm run build
-```
 
 ---
 
