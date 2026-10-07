@@ -1,0 +1,146 @@
+// ============================================================================
+// UniPlan — Schema Prisma
+// Modello dati per l'ottimizzazione di esami e percorsi di studio
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+/// Tipo di prova d'esame
+enum ExamType {
+  SCRITTO
+  ORALE
+  PROGETTO
+  LABORATORIO
+  SCRITTO_ORALE
+}
+
+/// Stato di una sessione di studio
+enum StudySessionStatus {
+  PLANNED
+  COMPLETED
+  SKIPPED
+}
+
+// ---------------------------------------------------------------------------
+// Course (Esame)
+// ---------------------------------------------------------------------------
+
+model Course {
+  id               String   @id @default(cuid())
+  codice           String?  @db.VarChar(20)   /// es. "ING-INF/05"
+  nome             String   @db.VarChar(200)
+  cfu              Int      @default(6)
+  semestre         Int                        /// 1 o 2
+  annoCorso        Int      @map("anno_corso") /// 1-3
+  difficoltaStimata Int     @default(3) @map("difficolta_stimata") /// 1-5
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  // --- Relazioni DAG (propedeuticità) ---
+  // Esami che QUESTO esame richiede come prerequisiti
+  prerequisites    Prerequisite[] @relation("CoursePrerequisites")
+  // Esami per i quali QUESTO esame è prerequisito
+  dependentCourses Prerequisite[] @relation("PrerequisiteCourse")
+
+  // --- Altre relazioni ---
+  examCalls     ExamCall[]
+  studySessions StudySession[]
+
+  @@map("courses")
+}
+
+// ---------------------------------------------------------------------------
+// Prerequisite (Tabella di giunzione per il DAG di propedeuticità)
+// ---------------------------------------------------------------------------
+
+model Prerequisite {
+  /// L'esame che ha il vincolo (deve prima superare il prerequisito)
+  courseId             String @map("course_id")
+  /// L'esame propedeutico che deve essere superato
+  prerequisiteCourseId String @map("prerequisite_course_id")
+
+  course             Course @relation("CoursePrerequisites", fields: [courseId], references: [id], onDelete: Cascade)
+  prerequisiteCourse Course @relation("PrerequisiteCourse", fields: [prerequisiteCourseId], references: [id], onDelete: Cascade)
+
+  @@id([courseId, prerequisiteCourseId])
+  @@map("prerequisites")
+}
+
+// ---------------------------------------------------------------------------
+// ExamCall (Appello d'Esame)
+// ---------------------------------------------------------------------------
+
+model ExamCall {
+  id        String   @id @default(cuid())
+  courseId   String   @map("course_id")
+  dataOra   DateTime @map("data_ora") @db.Timestamptz
+  aula      String?  @db.VarChar(100)   /// Aula o luogo dell'appello
+  tipoProva ExamType @default(SCRITTO) @map("tipo_prova")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  course       Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  studySessions StudySession[]
+
+  // Indice per query veloci di scheduling per corso + data
+  @@index([courseId, dataOra], map: "idx_exam_calls_course_date")
+  @@map("exam_calls")
+}
+
+// ---------------------------------------------------------------------------
+// StudyPlan (Piano Generato dallo Scheduler)
+// ---------------------------------------------------------------------------
+
+model StudyPlan {
+  id                        String   @id @default(cuid())
+  nomePiano                 String   @map("nome_piano") @db.VarChar(200)
+  oreStudioGiornaliereTarget Float   @default(4.0) @map("ore_studio_giornaliere_target")
+  giorniBufferMinimi        Int      @default(3) @map("giorni_buffer_minimi")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  studySessions StudySession[]
+
+  @@map("study_plans")
+}
+
+// ---------------------------------------------------------------------------
+// StudySession (Sessione / blocco di studio sulla timeline)
+// ---------------------------------------------------------------------------
+
+model StudySession {
+  id             String             @id @default(cuid())
+  studyPlanId    String             @map("study_plan_id")
+  courseId        String             @map("course_id")
+  examCallId     String?            @map("exam_call_id") /// Appello target (opzionale)
+  data           DateTime           @db.Timestamptz
+  orePianificate Float              @default(2.0) @map("ore_pianificate")
+  stato          StudySessionStatus @default(PLANNED)
+  note           String?            @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  studyPlan StudyPlan @relation(fields: [studyPlanId], references: [id], onDelete: Cascade)
+  course    Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  examCall  ExamCall? @relation(fields: [examCallId], references: [id], onDelete: SetNull)
+
+  // Indice per estrarre la vista calendario di un piano
+  @@index([studyPlanId, data], map: "idx_study_sessions_plan_date")
+  // Indice per cercare sessioni per corso
+  @@index([courseId, data], map: "idx_study_sessions_course_date")
+  @@map("study_sessions")
+}

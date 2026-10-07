@@ -1,0 +1,40 @@
+{
+  "name": "generatore-pianidistudio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts",
+    "start": "tsx src/api/server.ts",
+    "server:dev": "tsx watch src/api/server.ts",
+    "client:dev": "npm run dev --prefix client",
+    "client:build": "npm run build --prefix client",
+    "dev": "concurrently -n \"api,client\" -c \"cyan,magenta\" \"npm run server:dev\" \"npm run client:dev\"",
+    "build": "tsc --noEmit && npm run client:build",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^22.13.0",
+    "concurrently": "^10.0.5",
+    "prisma": "^6.4.1",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.1"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.3.0",
+    "@prisma/client": "^6.4.1",
+    "fastify": "^5.12.5",
+    "zod": "^4.6.5"
+  }
+}
