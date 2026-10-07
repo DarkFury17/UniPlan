@@ -1,10 +1,25 @@
 # UniPlan — Intelligent Academic Study Planner & Exam Scheduler
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![Fastify](https://img.shields.io/badge/Fastify-5.12-black.svg?style=flat-square&logo=fastify)](https://fastify.dev/)
-[![React](https://img.shields.io/badge/React-19.0-61dafb.svg?style=flat-square&logo=react)](https://react.dev/)
-[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4.0-38bdf8.svg?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
-[![Vitest](https://img.shields.io/badge/Vitest-52%20Tests%20Passed-brightgreen.svg?style=flat-square&logo=vitest)](https://vitest.dev/)
+<p align="center">
+  <a href="https://uni-plan-mocha.vercel.app">
+    <img src="https://img.shields.io/badge/%F0%9F%9A%80%20Prova%20la%20Live%20Demo-Vercel-emerald?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
+  </a>
+  &nbsp;
+  <a href="https://uniplan-api.onrender.com/api/health">
+    <img src="https://img.shields.io/badge/%E2%9A%A1%20Backend%20API%20Status-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white" alt="Backend API Status" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://uni-plan-mocha.vercel.app"><strong>🚀 Prova la Live Demo</strong></a> • 
+  <a href="https://uniplan-api.onrender.com/api/health"><strong>⚡ Backend API Status</strong></a>
+</p>
+
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6.svg?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Fastify](https://img.shields.io/badge/Fastify-5.12-000000.svg?style=flat-square&logo=fastify&logoColor=white)](https://fastify.dev/)
+[![React 19](https://img.shields.io/badge/React-19.0-61DAFB.svg?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+[![Vitest 52/52 Passed](https://img.shields.io/badge/Vitest-52%2F52%20Passed-22c55e.svg?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4.0-06B6D4.svg?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![RFC 5545](https://img.shields.io/badge/iCalendar-RFC%205545-orange.svg?style=flat-square)](https://datatracker.ietf.org/doc/html/rfc5545)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
@@ -122,7 +137,7 @@ Segui questi 3 semplici passaggi per eseguire l'intera applicazione in locale:
 
 ### 1. Clona il Repository e Installa le Dipendenze
 ```bash
-git clone https://github.com/tuo-username/UniPlan.git
+git clone https://github.com/DarkFury17/UniPlan.git
 cd UniPlan
 npm install
 npm install --prefix client
@@ -142,7 +157,17 @@ npm run dev
 - **Fastify API Server:** [http://localhost:3000](http://localhost:3000)
 - **API Health Check:** `curl http://localhost:3000/api/health`
 
-> 💡 **Quick Demo:** Nella dashboard, clicca sul pulsante **"Carica Corso Esempio (1-Click)"** per popolare istantaneamente il form con 8 esami realistici di Informatica, le relative propedeuticità e 16 appelli, quindi premi **"Genera Piano di Studio Ottimizzato"**!
+> 💡 **Quick Demo:** Nella dashboard, seleziona uno dei percorsi di laurea accademici precaricati (Informatica, Economia, Ingegneria) oppure inserisci i tuoi insegnamenti per generare in pochi millisecondi il piano ottimizzato!
+
+---
+
+## 🌐 Deploy & Architettura di Produzione
+
+UniPlan è architettato per un deployment disaccoppiato ad alte prestazioni e scalabilità cloud:
+
+- **Frontend statico su Vercel:** L'interfaccia React 19 è distribuita globalmente tramite la CDN edge di Vercel (`https://uni-plan-mocha.vercel.app`). La configurazione `vercel.json` implementa un reverse proxy trasparente per tutte le route `/api/*`, instradando il traffico direttamente verso il backend senza incorrere in limitazioni CORS.
+- **Backend headless su Render:** L'API Fastify risiede su Render (`https://uniplan-api.onrender.com`), configurata con host binding `0.0.0.0` e policy CORS permissive con allowed-headers per gestire richieste da qualsiasi client autorizzato.
+- **Calcolo Algoritmico In-Memory:** I motori DAG (Kahn + DFS) e CSP (backtracking con potatura topologica) operano interamente in memoria senza vincoli o latenze di database, garantendo tempi di risposta inferiori a 50ms e **zero cold-start** sul calcolo del piano.
 
 ---
 
