@@ -67,23 +67,23 @@ export const TimelineCalendar: React.FC<TimelineCalendarProps> = ({
 
   return (
     <div className="space-y-3 pt-2">
-      <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 px-0.5">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-          Cronoprogramma Giornaliero ({sortedDays.length} giorni)
+      <div className="flex items-center justify-between text-xs text-stone-500 dark:text-stone-400 px-0.5">
+        <span className="text-xs font-bold uppercase tracking-wider text-stone-700 dark:text-stone-300">
+          Cronoprogramma Giornaliero ({sortedDays.length} giorni totali)
         </span>
         <div className="flex items-center space-x-3 text-xs">
           <span className="flex items-center space-x-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-xs" />
-            <span className="text-slate-700 dark:text-slate-300 font-medium">Appello d'Esame</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 ring-2 ring-amber-400/30" />
+            <span className="text-stone-800 dark:text-stone-200 font-bold">Appello d'Esame</span>
           </span>
           <span className="flex items-center space-x-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-xs" />
-            <span className="text-slate-600 dark:text-slate-400 font-medium">Sessione di Studio</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-700" />
+            <span className="text-stone-600 dark:text-stone-400 font-medium">Sessione di Studio</span>
           </span>
         </div>
       </div>
 
-      <div className="space-y-2.5 max-h-[540px] overflow-y-auto pr-1">
+      <div className="space-y-3 max-h-[580px] overflow-y-auto pr-1">
         {sortedDays.map((item) => {
           const hasExam = item.exams.length > 0;
           const hasStudy = item.sessions.length > 0;
@@ -91,61 +91,61 @@ export const TimelineCalendar: React.FC<TimelineCalendarProps> = ({
           return (
             <div
               key={item.date.toISOString()}
-              className={`p-3.5 rounded-xl border transition-all ${
+              className={`p-4 rounded-xl border transition-all ${
                 hasExam
-                  ? "bg-amber-500/5 dark:bg-amber-950/20 border-amber-300/80 dark:border-amber-800/60 shadow-xs"
-                  : "bg-slate-50/90 dark:bg-slate-950/60 border-slate-200 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700"
+                  ? "bg-amber-50/60 dark:bg-amber-950/20 border-2 border-amber-400 dark:border-amber-700/80 shadow-xs"
+                  : "bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 hover:border-stone-300 dark:hover:border-stone-700"
               }`}
             >
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center space-x-2">
+              <div className="flex items-center justify-between mb-2.5">
+                <div className="flex items-center space-x-2.5">
                   <div
-                    className={`p-1.5 rounded-lg ${
+                    className={`w-7 h-7 rounded-lg flex items-center justify-center ${
                       hasExam
-                        ? "bg-amber-500 text-white shadow-xs"
-                        : "bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900/50"
+                        ? "bg-amber-600 text-white shadow-2xs"
+                        : "bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700"
                     }`}
                   >
                     {hasExam ? (
-                      <GraduationCap className="w-4 h-4" />
+                      <GraduationCap className="w-4 h-4 stroke-[2.5]" />
                     ) : (
                       <Calendar className="w-4 h-4" />
                     )}
                   </div>
-                  <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 capitalize">
+                  <span className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100 capitalize">
                     {formatDayTitle(item.date)}
                   </span>
                 </div>
 
                 {hasStudy && (
-                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/50">
+                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                     {Math.round(item.totalHours * 10) / 10}h studio
                   </span>
                 )}
               </div>
 
-              {/* Eventi Esame */}
+              {/* Eventi Esame in Evidenza Ambra */}
               {hasExam && (
-                <div className="space-y-1.5 my-2">
+                <div className="space-y-2 my-2.5">
                   {item.exams.map((exam) => (
                     <div
                       key={exam.examCall.id}
-                      className="flex items-center justify-between p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-amber-300 dark:border-amber-800/70 text-slate-900 dark:text-slate-100 text-xs shadow-xs"
+                      className="flex items-center justify-between p-3.5 rounded-lg bg-amber-100/70 text-amber-950 border-2 border-amber-300 dark:bg-amber-950/70 dark:text-amber-200 dark:border-amber-800 text-xs shadow-2xs"
                     >
-                      <div className="flex items-center space-x-2 flex-wrap gap-y-1">
-                        <span className="px-2 py-0.5 rounded bg-amber-500 text-white font-bold text-[10px] tracking-wider uppercase font-mono shadow-2xs">
-                          ESAME
+                      <div className="flex items-center space-x-2.5 flex-wrap gap-y-1">
+                        <span className="px-2 py-0.5 rounded bg-amber-800 text-white font-bold text-[10px] tracking-wider uppercase font-mono shadow-2xs">
+                          PROVA D'ESAME
                         </span>
-                        <span className="font-bold text-slate-900 dark:text-slate-100">
+                        <span className="font-extrabold text-stone-900 dark:text-white text-sm">
                           {exam.courseName}
                         </span>
-                        <span className="text-slate-500 dark:text-slate-400 text-[11px]">
+                        <span className="text-amber-900 dark:text-amber-300 font-semibold text-[11px]">
                           ({exam.examCall.tipoProva})
                         </span>
                       </div>
-                      <div className="flex items-center space-x-3 font-mono text-[11px] text-amber-800 dark:text-amber-300 font-semibold">
-                        <span className="flex items-center space-x-1">
-                          <Clock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                      <div className="flex items-center space-x-3 font-mono text-xs text-amber-950 dark:text-amber-200 font-bold">
+                        <span className="flex items-center space-x-1.5 bg-white/80 dark:bg-stone-900/80 px-2 py-1 rounded border border-amber-300 dark:border-amber-800">
+                          <Clock className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
                           <span>
                             {new Date(exam.examCall.dataOra).toLocaleTimeString("it-IT", {
                               hour: "2-digit",
@@ -154,8 +154,8 @@ export const TimelineCalendar: React.FC<TimelineCalendarProps> = ({
                           </span>
                         </span>
                         {exam.examCall.aula && (
-                          <span className="flex items-center space-x-1 text-slate-600 dark:text-slate-400">
-                            <MapPin className="w-3 h-3 text-slate-400" />
+                          <span className="flex items-center space-x-1 text-stone-700 dark:text-stone-300 font-sans">
+                            <MapPin className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
                             <span>{exam.examCall.aula}</span>
                           </span>
                         )}
@@ -165,18 +165,18 @@ export const TimelineCalendar: React.FC<TimelineCalendarProps> = ({
                 </div>
               )}
 
-              {/* Sessioni di studio */}
+              {/* Sessioni di studio: Salvia desaturato con border-l-4 smeraldo */}
               {hasStudy && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
                   {item.sessions.map((session, sIdx) => (
                     <div
                       key={sIdx}
-                      className="flex items-center justify-between px-3 py-2 rounded-lg bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/70 dark:border-blue-900/40 text-xs"
+                      className="flex items-center justify-between px-3.5 py-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-900/40 border-l-4 border-l-emerald-600 dark:border-l-emerald-500 text-xs shadow-2xs"
                     >
-                      <span className="text-slate-800 dark:text-slate-200 truncate mr-2 font-medium">
-                        📖 {session.courseName}
+                      <span className="text-stone-900 dark:text-stone-100 truncate mr-2 font-semibold">
+                        {session.courseName}
                       </span>
-                      <span className="font-mono text-blue-700 dark:text-blue-300 font-bold shrink-0">
+                      <span className="font-mono text-emerald-900 dark:text-emerald-300 font-bold shrink-0 bg-white dark:bg-stone-900 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
                         {session.orePianificate}h
                       </span>
                     </div>

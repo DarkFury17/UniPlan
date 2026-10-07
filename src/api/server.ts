@@ -5,8 +5,8 @@
 
 import { buildApp } from "./app";
 
-const PORT = Number(process.env.PORT) || 3000;
-const HOST = process.env.HOST || "0.0.0.0";
+const port = Number(process.env.PORT) || 3000;
+const host = "0.0.0.0";
 
 async function startServer() {
   const app = buildApp();
@@ -33,7 +33,7 @@ async function startServer() {
   // Avvio ascolto HTTP
   // ---------------------------------------------------------------------------
   try {
-    const address = await app.listen({ port: PORT, host: HOST });
+    const address = await app.listen({ port, host });
     app.log.info(`🚀 UniPlan API Server in ascolto su ${address}`);
   } catch (err) {
     app.log.error(err);

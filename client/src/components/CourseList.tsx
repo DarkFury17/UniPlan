@@ -67,27 +67,7 @@ export const CourseList: React.FC<CourseListProps> = ({
     });
   };
 
-  const getDifficultyBadge = (diff: number) => {
-    if (diff <= 2) {
-      return {
-        bg: "bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-900/50",
-        barActive: "bg-emerald-500",
-        barInactive: "bg-emerald-200 dark:bg-emerald-950",
-      };
-    }
-    if (diff === 3) {
-      return {
-        bg: "bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200/80 dark:border-amber-900/50",
-        barActive: "bg-amber-500",
-        barInactive: "bg-amber-200 dark:bg-amber-950",
-      };
-    }
-    return {
-      bg: "bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border-rose-200/80 dark:border-rose-900/50",
-      barActive: "bg-rose-500",
-      barInactive: "bg-rose-200 dark:bg-rose-950",
-    };
-  };
+
 
   const handleConfirmDelete = () => {
     if (!deleteTarget) return;
@@ -99,17 +79,17 @@ export const CourseList: React.FC<CourseListProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl p-4 sm:p-5 shadow-xs transition-colors duration-200 space-y-4">
-      <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+    <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl p-4 sm:p-5 shadow-xs transition-colors duration-200 space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-stone-100 dark:border-stone-800">
         <div className="flex items-center space-x-2.5">
-          <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900/50">
+          <div className="w-8 h-8 rounded-lg bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700">
             <BookOpen className="w-4 h-4" />
           </div>
           <div>
-            <h2 className="text-sm font-bold tracking-tight text-slate-900 dark:text-slate-100">
-              Corsi & Appelli d'Esame ({courses.length})
+            <h2 className="text-sm font-bold tracking-tight text-stone-900 dark:text-stone-100">
+              Insegnamenti & Appelli d'Esame ({courses.length})
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-stone-500 dark:text-stone-400">
               Gestisci esami, crediti formativi, propedeuticità e date d'appello disponibili
             </p>
           </div>
@@ -117,19 +97,19 @@ export const CourseList: React.FC<CourseListProps> = ({
 
         <button
           onClick={() => setIsAddCourseOpen(true)}
-          className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+          className="flex items-center justify-center space-x-1.5 px-3.5 py-2 rounded-lg bg-emerald-800 hover:bg-emerald-900 text-white dark:bg-emerald-700 dark:hover:bg-emerald-600 text-xs font-bold shadow-sm transition-colors cursor-pointer shrink-0"
         >
-          <Plus className="w-3.5 h-3.5" />
-          <span>Aggiungi Esame</span>
+          <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+          <span>Aggiungi Insegnamento</span>
         </button>
       </div>
 
       {courses.length === 0 ? (
-        <div className="text-center py-12 px-4 bg-slate-50 dark:bg-slate-950/40 rounded-xl border border-dashed border-slate-300 dark:border-slate-800">
-          <BookOpen className="w-9 h-9 text-slate-400 dark:text-slate-600 mx-auto mb-2" />
-          <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">Nessun esame configurato</p>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Clicca su "Carica piano demo (Informatica)" in alto oppure aggiungi un esame manualmente.
+        <div className="text-center py-12 px-4 bg-stone-50 dark:bg-stone-950/40 rounded-xl border border-dashed border-stone-300 dark:border-stone-800">
+          <BookOpen className="w-8 h-8 text-stone-400 dark:text-stone-600 mx-auto mb-2" />
+          <p className="text-sm font-semibold text-stone-800 dark:text-stone-200">Nessun insegnamento configurato</p>
+          <p className="text-xs text-stone-500 dark:text-stone-400 mt-1 max-w-md mx-auto">
+            Seleziona un corso di laurea dal Passo 1 oppure aggiungi manualmente i tuoi esami universitari.
           </p>
         </div>
       ) : (
@@ -138,45 +118,40 @@ export const CourseList: React.FC<CourseListProps> = ({
             const coursePrereqs = getPrerequisitesForCourse(course.id);
             const calls = getExamCallsForCourse(course.id);
             const isExpanded = expandedCourseId === course.id;
-            const diffStyle = getDifficultyBadge(course.difficoltaStimata);
-
             return (
               <div
                 key={course.id}
-                className="bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200/90 dark:border-slate-800/80 rounded-xl p-4 transition-all hover:border-slate-300 dark:hover:border-slate-700 space-y-3"
+                className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl p-4 sm:p-5 transition-all hover:border-stone-300 dark:hover:border-stone-700 space-y-3.5 shadow-sm"
               >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="space-y-1.5">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="space-y-1.5 flex-1 min-w-0">
                     <div className="flex items-center space-x-2 flex-wrap gap-y-1">
                       {course.codice && (
-                        <span className="font-mono text-[11px] font-semibold bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded border border-slate-300/80 dark:border-slate-700/50">
+                        <span className="font-mono text-[11px] font-semibold bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 px-2 py-0.5 rounded border border-stone-200 dark:border-stone-700">
                           {course.codice}
                         </span>
                       )}
-                      <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                      <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100 tracking-tight truncate">
                         {course.nome}
                       </h3>
                     </div>
-                    <div className="flex items-center space-x-2.5 text-xs text-slate-500 dark:text-slate-400 flex-wrap gap-y-1">
-                      <span className="px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 font-semibold border border-blue-200/80 dark:border-blue-900/50 text-[11px]">
+                    <div className="flex items-center space-x-2.5 text-xs text-stone-600 dark:text-stone-400 flex-wrap gap-y-1">
+                      <span className="font-mono font-semibold px-2.5 py-0.5 rounded bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 text-[11px]">
                         {course.cfu} CFU
                       </span>
-                      <span>Anno {course.annoCorso}, Sem. {course.semestre}</span>
+                      <span className="font-medium">Anno {course.annoCorso} • Sem. {course.semestre}</span>
                       <span>•</span>
-                      {/* Color-coded difficulty badge */}
-                      <div
-                        className={`inline-flex items-center space-x-1.5 px-2 py-0.5 rounded border text-[11px] font-medium ${diffStyle.bg}`}
-                        title={`Difficoltà stimata: ${course.difficoltaStimata}/5`}
-                      >
+                      {/* Indicatore di difficoltà a segmenti ambra/arancio */}
+                      <div className="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-900/60 font-semibold text-[11px]">
                         <span>Difficoltà: {course.difficoltaStimata}/5</span>
                         <div className="flex space-x-0.5 ml-0.5">
                           {Array.from({ length: 5 }).map((_, i) => (
                             <span
                               key={i}
-                              className={`w-1 h-2 rounded-xs ${
+                              className={`w-1.5 h-2 rounded-xs ${
                                 i < course.difficoltaStimata
-                                  ? diffStyle.barActive
-                                  : diffStyle.barInactive
+                                  ? "bg-amber-500"
+                                  : "bg-amber-200 dark:bg-amber-900"
                               }`}
                             />
                           ))}
@@ -187,24 +162,24 @@ export const CourseList: React.FC<CourseListProps> = ({
 
                   <button
                     onClick={() => setDeleteTarget({ type: "course", course })}
-                    className="text-slate-400 hover:text-red-600 dark:hover:text-red-400 p-1.5 rounded-lg hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                    title="Elimina esame"
+                    className="text-stone-400 hover:text-rose-700 dark:hover:text-rose-400 p-1.5 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors cursor-pointer shrink-0"
+                    title="Elimina insegnamento"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
 
-                {/* Propedeuticità attive con freccia */}
+                {/* Propedeuticità attive con freccia verde bosco */}
                 {coursePrereqs.length > 0 && (
-                  <div className="flex items-center flex-wrap gap-1.5 pt-0.5">
-                    <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center space-x-1">
-                      <ArrowRight className="w-3 h-3 text-indigo-500" />
-                      <span>Richiede:</span>
+                  <div className="flex items-center flex-wrap gap-1.5 pt-0.5 text-xs">
+                    <span className="text-[11px] font-bold text-stone-600 dark:text-stone-400 flex items-center space-x-1">
+                      <ArrowRight className="w-3.5 h-3.5 text-emerald-800 dark:text-emerald-500 stroke-[2.5]" />
+                      <span>Richiede superamento di:</span>
                     </span>
                     {coursePrereqs.map((p) => (
                       <span
                         key={p.id}
-                        className="text-[11px] px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-900/50 font-medium"
+                        className="text-[11px] px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-semibold"
                       >
                         {p.nome}
                       </span>
@@ -213,18 +188,18 @@ export const CourseList: React.FC<CourseListProps> = ({
                 )}
 
                 {/* Appelli disponibili */}
-                <div className="pt-2.5 border-t border-slate-200/80 dark:border-slate-800/80">
+                <div className="pt-3 border-t border-stone-100 dark:border-stone-800/80">
                   <div className="flex items-center justify-between text-xs mb-2">
-                    <span className="text-slate-700 dark:text-slate-300 font-semibold flex items-center space-x-1.5">
-                      <Calendar className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                    <span className="text-stone-800 dark:text-stone-200 font-bold flex items-center space-x-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
                       <span>{calls.length} {calls.length === 1 ? "Appello d'esame" : "Appelli d'esame"}</span>
                     </span>
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => setActiveCourseForCall(course)}
-                        className="text-[11px] text-blue-600 dark:text-blue-400 hover:underline font-semibold flex items-center space-x-1 cursor-pointer"
+                        className="text-[11px] text-emerald-800 dark:text-emerald-400 hover:text-emerald-950 dark:hover:text-emerald-300 font-bold flex items-center space-x-1 cursor-pointer"
                       >
-                        <Plus className="w-3 h-3" />
+                        <Plus className="w-3 h-3 stroke-[2.5]" />
                         <span>Aggiungi data</span>
                       </button>
                       {calls.length > 2 && (
@@ -232,7 +207,7 @@ export const CourseList: React.FC<CourseListProps> = ({
                           onClick={() =>
                             setExpandedCourseId(isExpanded ? null : course.id)
                           }
-                          className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-0.5 cursor-pointer"
+                          className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-0.5 cursor-pointer"
                         >
                           {isExpanded ? (
                             <ChevronUp className="w-3.5 h-3.5" />
@@ -245,26 +220,26 @@ export const CourseList: React.FC<CourseListProps> = ({
                   </div>
 
                   {calls.length === 0 ? (
-                    <p className="text-[11px] text-amber-600 dark:text-amber-400 italic">
-                      Nessun appello inserito (richiesto almeno 1 per la schedulazione)
+                    <p className="text-[11px] text-amber-900 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50 p-2 rounded-lg font-semibold">
+                      Nessun appello inserito (richiesto almeno 1 per la pianificazione)
                     </p>
                   ) : (
                     <div className="space-y-1.5">
                       {(isExpanded ? calls : calls.slice(0, 2)).map((call) => (
                         <div
                           key={call.id}
-                          className="flex items-center justify-between text-xs bg-amber-500/5 dark:bg-amber-950/20 px-2.5 py-1.5 rounded-lg border border-amber-200/80 dark:border-amber-900/40"
+                          className="flex items-center justify-between text-xs bg-stone-50 dark:bg-stone-950/70 px-2.5 py-1.5 rounded-lg border border-stone-200 dark:border-stone-800"
                         >
                           <div className="flex items-center space-x-2">
-                            <span className="font-mono font-semibold text-amber-800 dark:text-amber-300 text-xs">
+                            <span className="font-mono font-bold text-stone-900 dark:text-stone-100 text-xs">
                               {formatDate(call.dataOra)}
                             </span>
-                            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/50 font-medium">
+                            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 font-medium">
                               {call.tipoProva}
                             </span>
                             {call.aula && (
-                              <span className="text-slate-600 dark:text-slate-400 flex items-center space-x-1 text-[11px]">
-                                <MapPin className="w-2.5 h-2.5 text-amber-600/70 dark:text-amber-400/70" />
+                              <span className="text-stone-500 dark:text-stone-400 flex items-center space-x-1 text-[11px]">
+                                <MapPin className="w-2.5 h-2.5 text-stone-400" />
                                 <span>{call.aula}</span>
                               </span>
                             )}
@@ -277,17 +252,17 @@ export const CourseList: React.FC<CourseListProps> = ({
                                 courseName: course.nome,
                               })
                             }
-                            className="text-slate-400 hover:text-red-600 dark:hover:text-red-400 p-0.5 rounded transition-colors cursor-pointer"
+                            className="text-stone-400 hover:text-rose-700 dark:hover:text-rose-400 p-1 rounded hover:bg-stone-200/50 dark:hover:bg-stone-800 transition-colors cursor-pointer"
                             title="Rimuovi data"
                           >
-                            <Trash2 className="w-3 h-3" />
+                            <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
                       ))}
                       {!isExpanded && calls.length > 2 && (
                         <button
                           onClick={() => setExpandedCourseId(course.id)}
-                          className="text-[11px] text-blue-600 dark:text-blue-400 hover:underline block text-center w-full pt-0.5 font-medium cursor-pointer"
+                          className="text-[11px] text-emerald-800 dark:text-emerald-400 hover:underline block text-center w-full pt-1 font-semibold cursor-pointer"
                         >
                           Mostra altri {calls.length - 2} appelli...
                         </button>

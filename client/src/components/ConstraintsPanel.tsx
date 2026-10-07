@@ -1,5 +1,5 @@
 import React from "react";
-import { Clock, ShieldAlert, Calendar, Sliders, Minus, Plus } from "lucide-react";
+import { Clock, ShieldCheck, Calendar, SlidersHorizontal, Minus, Plus } from "lucide-react";
 import type { SchedulingConstraints } from "../types";
 
 interface ConstraintsPanelProps {
@@ -19,130 +19,140 @@ export const ConstraintsPanel: React.FC<ConstraintsPanelProps> = ({ constraints,
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl p-4 sm:p-5 shadow-xs transition-colors duration-200 space-y-4">
-      <div className="flex items-center space-x-2.5 pb-3 border-b border-slate-100 dark:border-slate-800">
-        <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900/50">
-          <Sliders className="w-4 h-4" />
-        </div>
-        <div>
-          <h2 className="text-sm font-bold tracking-tight text-slate-900 dark:text-slate-100">
-            Parametri & Vincoli di Scheduling
-          </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Regola i parametri del motore CSP e la distribuzione a ritroso delle sessioni di studio
-          </p>
+    <div className="bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-5 rounded-lg space-y-4 shadow-sm">
+      <div className="flex items-center justify-between pb-3 border-b border-stone-200 dark:border-stone-800">
+        <div className="flex items-center space-x-2.5">
+          <div className="w-8 h-8 rounded-lg bg-emerald-800 text-white flex items-center justify-center shadow-2xs">
+            <SlidersHorizontal className="w-4 h-4" />
+          </div>
+          <div>
+            <h2 className="text-sm font-bold tracking-tight text-stone-900 dark:text-stone-100 uppercase">
+              Parametri di Studio & Vincoli Sessione
+            </h2>
+            <p className="text-xs text-stone-600 dark:text-stone-400">
+              Imposta il ritmo di preparazione e i tempi di riposo tra gli esami consecutivi
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* 1. Ore massime giornaliere */}
-        <div className="space-y-2.5 bg-slate-50 dark:bg-slate-950/60 p-3.5 rounded-lg border border-slate-200/80 dark:border-slate-800/80 flex flex-col justify-between transition-colors">
+        <div className="bg-white dark:bg-stone-950 p-4 rounded-lg border border-stone-200 dark:border-stone-800 shadow-2xs flex flex-col justify-between space-y-3">
           <div className="flex items-center justify-between">
-            <span className="flex items-center space-x-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300">
-              <Clock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+            <span className="flex items-center space-x-1.5 text-xs font-bold text-stone-900 dark:text-stone-200">
+              <Clock className="w-4 h-4 text-emerald-800 dark:text-emerald-400" />
               <span>Ore Max / Giorno</span>
             </span>
-            <div className="flex items-center space-x-1.5">
-              <button
-                type="button"
-                onClick={() => updateDailyHours(-0.5)}
-                disabled={constraints.oreStudioGiornaliereMax <= 2}
-                className="w-6 h-6 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 disabled:opacity-30 disabled:hover:bg-white dark:disabled:hover:bg-slate-800 transition-colors cursor-pointer"
-                title="Riduci ore"
-              >
-                <Minus className="w-3 h-3" />
-              </button>
-              <span className="min-w-[4.5rem] text-center px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 font-mono text-xs font-semibold border border-blue-200/80 dark:border-blue-900/50">
-                {constraints.oreStudioGiornaliereMax} h/gg
-              </span>
-              <button
-                type="button"
-                onClick={() => updateDailyHours(0.5)}
-                disabled={constraints.oreStudioGiornaliereMax >= 12}
-                className="w-6 h-6 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 disabled:opacity-30 disabled:hover:bg-white dark:disabled:hover:bg-slate-800 transition-colors cursor-pointer"
-                title="Aumenta ore"
-              >
-                <Plus className="w-3 h-3" />
-              </button>
-            </div>
+            <span className="px-2.5 py-1 rounded bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-stone-100 font-mono text-xs font-bold border border-stone-200 dark:border-stone-700">
+              {constraints.oreStudioGiornaliereMax} h
+            </span>
           </div>
-          <input
-            type="range"
-            min={2}
-            max={12}
-            step={0.5}
-            value={constraints.oreStudioGiornaliereMax}
-            onChange={(e) =>
-              onChange({
-                ...constraints,
-                oreStudioGiornaliereMax: parseFloat(e.target.value),
-              })
-            }
-            className="w-full accent-blue-600 dark:accent-blue-500 cursor-pointer h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg"
-          />
-          <p className="text-[11px] text-slate-500 dark:text-slate-400">
-            Tetto massimo giornaliero per bilanciare il carico cognitivo.
+
+          <div className="flex items-center space-x-2">
+            <button
+              type="button"
+              onClick={() => updateDailyHours(-0.5)}
+              disabled={constraints.oreStudioGiornaliereMax <= 2}
+              className="w-8 h-8 flex items-center justify-center rounded-lg border border-stone-300 dark:border-stone-700 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-900 dark:text-stone-100 disabled:opacity-30 transition-colors cursor-pointer font-bold shrink-0"
+              title="Riduci ore"
+            >
+              <Minus className="w-3.5 h-3.5" />
+            </button>
+            <input
+              type="range"
+              min={2}
+              max={12}
+              step={0.5}
+              value={constraints.oreStudioGiornaliereMax}
+              onChange={(e) =>
+                onChange({
+                  ...constraints,
+                  oreStudioGiornaliereMax: parseFloat(e.target.value),
+                })
+              }
+              className="w-full accent-emerald-800 dark:accent-emerald-600 cursor-pointer h-2 bg-stone-200 dark:bg-stone-700 rounded-lg"
+            />
+            <button
+              type="button"
+              onClick={() => updateDailyHours(0.5)}
+              disabled={constraints.oreStudioGiornaliereMax >= 12}
+              className="w-8 h-8 flex items-center justify-center rounded-lg border border-stone-300 dark:border-stone-700 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-900 dark:text-stone-100 disabled:opacity-30 transition-colors cursor-pointer font-bold shrink-0"
+              title="Aumenta ore"
+            >
+              <Plus className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <p className="text-[11px] text-stone-500 dark:text-stone-400 font-medium">
+            Tetto massimo di ore studio giornaliere raccomandato (2h - 12h).
           </p>
         </div>
 
         {/* 2. Buffer minimo tra esami */}
-        <div className="space-y-2.5 bg-slate-50 dark:bg-slate-950/60 p-3.5 rounded-lg border border-slate-200/80 dark:border-slate-800/80 flex flex-col justify-between transition-colors">
+        <div className="bg-white dark:bg-stone-950 p-4 rounded-lg border border-stone-200 dark:border-stone-800 shadow-2xs flex flex-col justify-between space-y-3">
           <div className="flex items-center justify-between">
-            <span className="flex items-center space-x-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300">
-              <ShieldAlert className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span>Buffer tra Esami</span>
+            <span className="flex items-center space-x-1.5 text-xs font-bold text-stone-900 dark:text-stone-200">
+              <ShieldCheck className="w-4 h-4 text-emerald-800 dark:text-emerald-400" />
+              <span>Buffer Minimo</span>
             </span>
-            <div className="flex items-center space-x-1.5">
-              <button
-                type="button"
-                onClick={() => updateBufferDays(-1)}
-                disabled={constraints.giorniBufferMinimi <= 0}
-                className="w-6 h-6 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 disabled:opacity-30 disabled:hover:bg-white dark:disabled:hover:bg-slate-800 transition-colors cursor-pointer"
-                title="Riduci giorni buffer"
-              >
-                <Minus className="w-3 h-3" />
-              </button>
-              <span className="min-w-[4.5rem] text-center px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 font-mono text-xs font-semibold border border-emerald-200/80 dark:border-emerald-900/50">
-                {constraints.giorniBufferMinimi} {constraints.giorniBufferMinimi === 1 ? "giorno" : "giorni"}
-              </span>
-              <button
-                type="button"
-                onClick={() => updateBufferDays(1)}
-                disabled={constraints.giorniBufferMinimi >= 10}
-                className="w-6 h-6 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 disabled:opacity-30 disabled:hover:bg-white dark:disabled:hover:bg-slate-800 transition-colors cursor-pointer"
-                title="Aumenta giorni buffer"
-              >
-                <Plus className="w-3 h-3" />
-              </button>
-            </div>
+            <span className="px-2.5 py-1 rounded bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-stone-100 font-mono text-xs font-bold border border-stone-200 dark:border-stone-700">
+              {constraints.giorniBufferMinimi} {constraints.giorniBufferMinimi === 1 ? "giorno" : "giorni"}
+            </span>
           </div>
-          <input
-            type="range"
-            min={0}
-            max={10}
-            step={1}
-            value={constraints.giorniBufferMinimi}
-            onChange={(e) =>
-              onChange({
-                ...constraints,
-                giorniBufferMinimi: parseInt(e.target.value, 10),
-              })
-            }
-            className="w-full accent-emerald-600 dark:accent-emerald-500 cursor-pointer h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg"
-          />
-          <p className="text-[11px] text-slate-500 dark:text-slate-400">
-            Intervallo minimo obbligatorio di riposo/ripasso tra due prove consecutive.
+
+          <div className="flex items-center space-x-2">
+            <button
+              type="button"
+              onClick={() => updateBufferDays(-1)}
+              disabled={constraints.giorniBufferMinimi <= 0}
+              className="w-8 h-8 flex items-center justify-center rounded-lg border border-stone-300 dark:border-stone-700 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-900 dark:text-stone-100 disabled:opacity-30 transition-colors cursor-pointer font-bold shrink-0"
+              title="Riduci buffer"
+            >
+              <Minus className="w-3.5 h-3.5" />
+            </button>
+            <input
+              type="range"
+              min={0}
+              max={10}
+              step={1}
+              value={constraints.giorniBufferMinimi}
+              onChange={(e) =>
+                onChange({
+                  ...constraints,
+                  giorniBufferMinimi: parseInt(e.target.value, 10),
+                })
+              }
+              className="w-full accent-emerald-800 dark:accent-emerald-600 cursor-pointer h-2 bg-stone-200 dark:bg-stone-700 rounded-lg"
+            />
+            <button
+              type="button"
+              onClick={() => updateBufferDays(1)}
+              disabled={constraints.giorniBufferMinimi >= 10}
+              className="w-8 h-8 flex items-center justify-center rounded-lg border border-stone-300 dark:border-stone-700 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-900 dark:text-stone-100 disabled:opacity-30 transition-colors cursor-pointer font-bold shrink-0"
+              title="Aumenta buffer"
+            >
+              <Plus className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <p className="text-[11px] text-stone-500 dark:text-stone-400 font-medium">
+            Giorni obbligatori di intervallo tra due prove consecutive.
           </p>
         </div>
 
         {/* 3. Data inizio preparazione */}
-        <div className="space-y-2.5 bg-slate-50 dark:bg-slate-950/60 p-3.5 rounded-lg border border-slate-200/80 dark:border-slate-800/80 flex flex-col justify-between transition-colors">
+        <div className="bg-white dark:bg-stone-950 p-4 rounded-lg border border-stone-200 dark:border-stone-800 shadow-2xs flex flex-col justify-between space-y-3">
           <div className="flex items-center justify-between">
-            <span className="flex items-center space-x-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300">
-              <Calendar className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-              <span>Inizio Preparazione</span>
+            <span className="flex items-center space-x-1.5 text-xs font-bold text-stone-900 dark:text-stone-200">
+              <Calendar className="w-4 h-4 text-emerald-800 dark:text-emerald-400" />
+              <span>Inizio Studio</span>
+            </span>
+            <span className="text-[11px] font-mono text-stone-500 dark:text-stone-400">
+              Data limite
             </span>
           </div>
+
           <input
             type="date"
             value={constraints.dataInizioPianificazione.slice(0, 10)}
@@ -152,10 +162,11 @@ export const ConstraintsPanel: React.FC<ConstraintsPanelProps> = ({ constraints,
                 dataInizioPianificazione: e.target.value,
               })
             }
-            className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-slate-100 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-mono"
+            className="w-full bg-stone-50 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-stone-900 dark:text-stone-100 text-xs rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-800/20 focus:border-emerald-800 font-mono font-semibold"
           />
-          <p className="text-[11px] text-slate-500 dark:text-slate-400">
-            Data limite iniziale entro cui allocare le sessioni di studio.
+
+          <p className="text-[11px] text-stone-500 dark:text-stone-400 font-medium">
+            Giorno di partenza a ritroso per il carico di studio.
           </p>
         </div>
       </div>

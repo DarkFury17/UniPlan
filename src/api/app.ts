@@ -22,8 +22,9 @@ export function buildApp(options: FastifyServerOptions = {}): FastifyInstance {
 
   // 1. Registrazione CORS
   app.register(cors, {
-    origin: "*",
+    origin: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
   });
 
   // 2. Registrazione Global Error Handler
